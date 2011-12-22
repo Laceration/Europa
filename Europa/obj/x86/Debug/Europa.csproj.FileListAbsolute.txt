@@ -1,0 +1,7 @@
+c:\users\nick\documents\visual studio 2010\Projects\Europa\Europa\Europa\bin\x86\Debug\Content\europa.xnb
+c:\users\nick\documents\visual studio 2010\Projects\Europa\Europa\Europa\bin\x86\Debug\Europa.exe
+c:\users\nick\documents\visual studio 2010\Projects\Europa\Europa\Europa\bin\x86\Debug\Europa.pdb
+c:\users\nick\documents\visual studio 2010\Projects\Europa\Europa\Europa\obj\x86\Debug\ResolveAssemblyReference.cache
+c:\users\nick\documents\visual studio 2010\Projects\Europa\Europa\Europa\obj\x86\Debug\Microsoft.Xna.Framework.RuntimeProfile.txt
+c:\users\nick\documents\visual studio 2010\Projects\Europa\Europa\Europa\obj\x86\Debug\Europa.exe
+c:\users\nick\documents\visual studio 2010\Projects\Europa\Europa\Europa\obj\x86\Debug\Europa.pdb
