@@ -107,6 +107,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Actors\Actor.cs" />
+    <Compile Include="Actors\Blob.cs" />
     <Compile Include="Console\EuropaConsole.cs" />
     <Compile Include="Input\Keyboard.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

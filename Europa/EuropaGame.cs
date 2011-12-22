@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using Europa.Console;
+using Europa.Actors;
 
 namespace Europa
 {
@@ -17,6 +18,15 @@ namespace Europa
     /// </summary>
     public class EuropaGame : Microsoft.Xna.Framework.Game
     {
+
+        #region Constants
+
+        /// <summary>
+        /// The constant force of gravity.
+        /// </summary>
+        const float GRAVITY_CONSTANT = 0.1f;
+
+        #endregion
 
         #region Private members
 
@@ -34,6 +44,11 @@ namespace Europa
         /// The game font.
         /// </summary>
         private SpriteFont _font;
+
+        /// <summary>
+        /// The list of actors in this game instance.
+        /// </summary>
+        private List<Actor> _actors;
 
         #endregion
 
@@ -72,6 +87,8 @@ namespace Europa
             this._gfxDeviceManager.PreferredBackBufferHeight = 600;
 
             this.Content.RootDirectory = "Content";
+
+            this._actors = new List<Actor>();
         }
 
         #endregion
@@ -143,7 +160,14 @@ namespace Europa
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
 
-            this._europaConsole.Update(gameTime);
+            float dt = (float)(gameTime.ElapsedGameTime.TotalMilliseconds / 16.0);
+
+            foreach (var actor in this._actors)
+            {
+                actor.Update(dt);
+            }
+
+            this._europaConsole.Update(dt);
 
             base.Update(gameTime);
         }
@@ -158,7 +182,12 @@ namespace Europa
 
             this.Drawer.Begin();
 
-            this._europaConsole.Draw(gameTime);
+            foreach (var actor in this._actors)
+            {
+                actor.Draw();
+            }
+
+            this._europaConsole.Draw();
 
             this.Drawer.End();
 
@@ -166,6 +195,22 @@ namespace Europa
         }
 
         #endregion
-        
+
+        #region Debug methods
+
+        /// <summary>
+        /// Adds an actor at the center of the screen.
+        /// </summary>
+        public void AddActor()
+        {
+            var blob = new Blob(this, Color.Red, new Vector2(400f, 0f));
+
+            blob.ApplyForce(Vector2.UnitY * GRAVITY_CONSTANT);
+
+            this._actors.Add(blob);
+        }
+
+        #endregion
+
     }
 }

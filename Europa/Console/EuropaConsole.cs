@@ -43,6 +43,11 @@ namespace Europa.Console
         /// </summary>
         private int _historyLine = 0;
 
+        /// <summary>
+        /// The property bag of the console.
+        /// </summary>
+        private Dictionary<string, object> _propertyBag;
+
         #endregion
 
         #region Constructor
@@ -68,8 +73,8 @@ namespace Europa.Console
         /// <summary>
         /// Updates the EuropaConsole.
         /// </summary>
-        /// <param name="gameTime">The elapsed game time.</param>
-        public void Update(GameTime gameTime)
+        /// <param name="dt">The delta time.</param>
+        public void Update(float dt)
         {
             var keysPressed = this._game.Keyboard.KeysPressed();
             var keysDown = this._game.Keyboard.KeysDown();
@@ -111,8 +116,6 @@ namespace Europa.Console
                     this._historyLine = this._history.Count;
                 }
 
-                /*
-
                 // up key
                 if (keyCode == 38)
                 {
@@ -134,9 +137,6 @@ namespace Europa.Console
                         this._currentLine = string.Empty;
                     }
                 }
-                
-                 
-                 */
             }
         }
 
@@ -162,14 +162,13 @@ namespace Europa.Console
         /// <summary>
         /// Renders the EuropaConsole.
         /// </summary>
-        /// <param name="gameTime">The ingame time that has passed.</param>
-        public void Draw(GameTime gameTime)
+        public void Draw()
         {
             this._game.Drawer.Draw(this._background, new Rectangle(0, 300, 800, 300), Color.White);
 
             this._game.Drawer.DrawString(this._spriteFont, this._currentLine, new Vector2(5f, 570f), Color.White);
 
-            for (int i = this._history.Count - 1; i >= 0; i--)
+            for (int i = this._history.Count - 1; i >= 0 && (this._history.Count - i) < 16; i--)
             {
                 this._game.Drawer.DrawString(this._spriteFont, this._history[i], new Vector2(5f, 570f - ((this._history.Count - i) * 18f)), Color.White);
             }
@@ -187,17 +186,63 @@ namespace Europa.Console
         {
             var parts = line.Split(' ');
 
-            object item = this._game;
-            for (int i = 0; i < parts.Length; i++)
+            // if this involves keywords or specific commands
+            if (!EvaluateLine(parts))
             {
+
+            }
+            else
+            {
+                // generic behaviour, will execute properties and methods
+                // on the EuropaGame instance
+                object item = this._game;
+                for (int i = 0; i < parts.Length; i++)
+                {
+                    if (item != null)
+                        item = EvaluateItem(item, parts[i]);
+                    else
+                        break;
+                }
+
                 if (item != null)
-                    item = EvaluateItem(item, parts[i]);
+                    WriteLine(item.ToString(), false, false);
+
+            }
+        }
+
+        /// <summary>
+        /// Evaluates a line for keywords and commands.
+        /// </summary>
+        /// <param name="line">The </param>
+        private bool EvaluateLine(string[] lineParts)
+        {
+            var keyword = lineParts[0];
+
+            // process the let command
+            if (keyword == "let")
+            {
+                if (lineParts.Length < 3)
+                {
+                    WriteLine("Not enough parameters, e.g.: 'let x 10' will create a variable named x and set its value to 10", false, true);
+                }
+
+                var variableName = lineParts[1];
+
+                // if it's longer they must've put an expression in there
+                if (lineParts.Length > 3)
+                {
+                    for (int i = 2; i < lineParts.Length; i++)
+                    {
+
+                    }
+                }
                 else
-                    break;
+                {
+
+                }
             }
 
-            if (item != null)
-                WriteLine(item.ToString(), false, false);
+            return false;
         }
 
         /// <summary>
